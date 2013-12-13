@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -44,13 +45,25 @@ void cvmovecallback(int event,int x,int y,int flags,void*para)
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	IplImage *img=cvLoadImage("adc.bmp");
-	int x=0;
-	int y=0;
-	cvNamedWindow("demo");
+	//IplImage *img=cvLoadImage("adc.bmp");
+	//int x=0;
+	//int y=0;
+	//cvNamedWindow("demo");
 	// cvSetMouseCallback("demo",cvmovecallback,(void*)img);
-	cvShowImage("demo",img);
+	//cvShowImage("demo",img);
 
+	string imgName;
+	cout << "input an image: " <<ends;
+	cin >> imgName;
+	cout << "input accepted : " << imgName;
+	Mat img = imread(imgName);
+	if(! img.data )                              // Check for invalid input
+	{
+		cout <<  "Could not open or find the image" << std::endl ;
+		return -1;
+	}
+	namedWindow( "Display window", CV_WINDOW_AUTOSIZE );// Create a window for display.
+	imshow( "Display window", img );                   // Show our image inside it.
 	cvWaitKey(0);
 
 	return 0;
