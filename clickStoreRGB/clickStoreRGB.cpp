@@ -43,6 +43,25 @@ void cvmovecallback(int event,int x,int y,int flags,void*para)
 	}
 }
 
+Mat img;
+
+static void onMouse( int event, int x, int y, int, void* )
+{
+    if( event != CV_EVENT_LBUTTONDOWN )
+        return;
+	
+	Mat_<Vec3b> _img = img;
+	cout << "r,g,b at (" << x << ", "<< y << ")"<< endl;
+	cout << " \tr = " << (int)_img(y,x)[2] ;
+	cout << " \tg = " << (int)_img(y,x)[1] ;
+	cout << " \tb = " << (int)_img(y,x)[0] ;
+	cout << endl;
+
+	img = _img;
+	
+}
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	//IplImage *img=cvLoadImage("adc.bmp");
@@ -55,15 +74,17 @@ int _tmain(int argc, _TCHAR* argv[])
 	string imgName;
 	cout << "input an image: " <<ends;
 	cin >> imgName;
-	cout << "input accepted : " << imgName;
-	Mat img = imread(imgName);
+	cout << "input accepted : " << imgName << endl;
+	img = imread(imgName);
 	if(! img.data )                              // Check for invalid input
 	{
 		cout <<  "Could not open or find the image" << std::endl ;
 		return -1;
 	}
-	namedWindow( "Display window", CV_WINDOW_AUTOSIZE );// Create a window for display.
-	imshow( "Display window", img );                   // Show our image inside it.
+	const string WIN_SRC  = "src";
+	namedWindow( WIN_SRC, CV_WINDOW_AUTOSIZE );// Create a window for display.
+	setMouseCallback(WIN_SRC, onMouse);
+	imshow( WIN_SRC, img );                   // Show our image inside it.
 	cvWaitKey(0);
 
 	return 0;
