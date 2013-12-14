@@ -62,6 +62,8 @@ static void onMouse( int event, int x, int y, int, void* )
 }
 
 
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	//IplImage *img=cvLoadImage("adc.bmp");
@@ -81,11 +83,20 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout <<  "Could not open or find the image" << std::endl ;
 		return -1;
 	}
-	const string WIN_SRC  = "src";
-	namedWindow( WIN_SRC, CV_WINDOW_AUTOSIZE );// Create a window for display.
-	setMouseCallback(WIN_SRC, onMouse);
-	imshow( WIN_SRC, img );                   // Show our image inside it.
-	cvWaitKey(0);
+	
+	for (;;)
+	{
+		const string WIN_SRC  = "src";
+		namedWindow( WIN_SRC, CV_WINDOW_AUTOSIZE );// Create a window for display.
+		setMouseCallback(WIN_SRC, onMouse);
+		imshow( WIN_SRC, img );                   // Show our image inside it.
+
+		char c = (char)waitKey();
+		if (c==27)
+		{
+			break;
+		}
+	}
 
 	return 0;
 }
