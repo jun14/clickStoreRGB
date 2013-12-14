@@ -7,10 +7,10 @@
 
 ostream& operator << (ostream &out, RGBRecord &record )
 {
-	out << "r,g,b at (" << record.x << ", "<< record.y << ")"<< endl;
-	out << " \tr = " << record.r ;
-	out << " \tg = " << record.g ;
-	out << " \tb = " << record.b ;
+	out << "r,g,b at (" << (int)record.x << ", "<< (int)record.y << ")"<< endl;
+	out << " \tr = " << (int)record.r ;
+	out << " \tg = " << (int)record.g ;
+	out << " \tb = " << (int)record.b ;
 	return out;
 }
 

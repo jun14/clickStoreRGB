@@ -2,48 +2,19 @@
 //
 
 #include "stdafx.h"
+
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include "RGBRecord.h"
 
 using namespace::std;
 using namespace::cv;
 
-void dispplex(IplImage*img,char*var1,char*var2 , char* var3,int x,int y)
-{
-	CvFont font;
-	cvInitFont(&font,CV_FONT_HERSHEY_SCRIPT_COMPLEX,1.0,1.0);
-	cvPutText(img,var1,cvPoint(x,y),&font,cvScalar(255,255,0));
-	cvPutText(img,var2,cvPoint(x+100,y),&font,cvScalar(255,255,0));
-	cvPutText(img,var3,cvPoint(x+200,y),&font,cvScalar(255,255,0));
-	cvShowImage("demo",img);
-
-}
-
-void cvmovecallback(int event,int x,int y,int flags,void*para)
-{
-	IplImage*img=(IplImage*)para;
-	switch(event){
-	case CV_EVENT_LBUTTONDOWN:
-		{
-			uchar *rgb;
-			rgb=(uchar*)(img->imageData+y*(img->widthStep)+(img->nChannels)*x);
-			char var1[5];
-				itoa((int)rgb[1],var1,10);
-			char var2[5];
-				itoa((int)rgb[2],var2,10);
-				char var3[5];
-				itoa((int)rgb[3],var3,10);
-			dispplex(img,var1,var2,var3,x,y);
-		break;	
-		}
-	default:break;
-	}
-}
-
-Mat img;
+Mat img; // Í¼Æ¬
+string imgName; // µ±Ç°Í¼Æ¬Â·¾¶
 
 static void onMouse( int event, int x, int y, int, void* )
 {
@@ -51,12 +22,8 @@ static void onMouse( int event, int x, int y, int, void* )
         return;
 	
 	Mat_<Vec3b> _img = img;
-	cout << "r,g,b at (" << x << ", "<< y << ")"<< endl;
-	cout << " \tr = " << (int)_img(y,x)[2] ;
-	cout << " \tg = " << (int)_img(y,x)[1] ;
-	cout << " \tb = " << (int)_img(y,x)[0] ;
-	cout << endl;
-
+	RGBRecord record( _img(y,x)[2], _img(y,x)[1], _img(y,x)[0], y, x, imgName); 
+	cout << record << endl;
 	img = _img;
 	
 }
@@ -73,7 +40,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	// cvSetMouseCallback("demo",cvmovecallback,(void*)img);
 	//cvShowImage("demo",img);
 
-	string imgName;
+
 	cout << "input an image: " <<ends;
 	cin >> imgName;
 	cout << "input accepted : " << imgName << endl;
