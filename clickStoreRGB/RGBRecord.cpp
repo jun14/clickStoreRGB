@@ -2,10 +2,13 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include "RGBRecord.h"
 
-ostream& operator << (ostream &out, RGBRecord &record )
+using namespace::std;
+
+ostream& operator << (ostream &out,const RGBRecord &record )
 {
 	out << "r,g,b at (" << (int)record.x << ", "<< (int)record.y << ")"<< endl;
 	out << " \tr = " << (int)record.r ;
@@ -16,16 +19,16 @@ ostream& operator << (ostream &out, RGBRecord &record )
 
 
 // write a record to a file
-ofstream& operator << (ofstream &file, RGBRecord &record )
+ofstream& operator << (ofstream &file,const RGBRecord &record )
 {
-	// 格式 255 0 0 test0001.bmp 100 200
-	string sp = " ";
+	// 格式: 255 0 0 test0001.bmp 100 200
+	string sp = "\t";
 	file << (int)(record.r) << sp;
 	file << (int)(record.g) << sp;
 	file << (int)(record.b) << sp;
 	file << record.filename << sp;
 	file << (int)(record.x) << sp;
-	file << (int)(record.y) << ends;
+	file << (int)(record.y) ;
 
 	return file;
 }

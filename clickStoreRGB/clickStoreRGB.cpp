@@ -3,11 +3,14 @@
 
 #include "stdafx.h"
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <vector>
+
 #include "RGBRecord.h"
 
 using namespace::std;
@@ -15,6 +18,8 @@ using namespace::cv;
 
 Mat img; // Í¼Æ¬
 string imgName; // µ±Ç°Í¼Æ¬Â·¾¶
+vector<RGBRecord> rgbVec;
+
 
 static void onMouse( int event, int x, int y, int, void* )
 {
@@ -23,23 +28,46 @@ static void onMouse( int event, int x, int y, int, void* )
 	
 	Mat_<Vec3b> _img = img;
 	RGBRecord record( _img(y,x)[2], _img(y,x)[1], _img(y,x)[0], y, x, imgName); 
+	rgbVec.push_back(record);
 	cout << record << endl;
 	img = _img;
 	
 }
 
+void writeVec()
+{
+	if (rgbVec.empty())
+	{
+		return;
+	}
 
+	// write to txt
+	ofstream outfile("rgbStat.txt", ofstream::out | ofstream::app);
+	if(!outfile)
+	{
+		cerr << "unable to open outfile" << endl;
+		return ;
+	}
+	else
+	{
+		if(outfile)
+		{
+			// write every record
+			for (vector<RGBRecord>::iterator iter = rgbVec.begin() ;
+					iter != rgbVec.end() ; ++iter)
+			{
+				outfile << *iter << endl;
+			}
+		}
+		// close the file
+		outfile.close();
+		outfile.clear();
+	}
+}
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//IplImage *img=cvLoadImage("adc.bmp");
-	//int x=0;
-	//int y=0;
-	//cvNamedWindow("demo");
-	// cvSetMouseCallback("demo",cvmovecallback,(void*)img);
-	//cvShowImage("demo",img);
-
 
 	cout << "input an image: " <<ends;
 	cin >> imgName;
@@ -61,6 +89,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		char c = (char)waitKey();
 		if (c==27)
 		{
+			writeVec();
 			break;
 		}
 	}

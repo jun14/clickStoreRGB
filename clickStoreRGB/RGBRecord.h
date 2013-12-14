@@ -10,21 +10,19 @@
 
 using namespace::std;
 
-typedef unsigned char uchar;
-
 class RGBRecord
 {
 public:
 	// constructors
 	RGBRecord() : r(0), g(0), b(0), x(0), y(0), filename() //default
 	{}
-	RGBRecord(uchar r, uchar g, uchar b): x(0), y(0) , filename() // only assign rgb
+	RGBRecord(unsigned char r, unsigned char g, unsigned char b): x(0), y(0) , filename() // only assign rgb
 	{
 		this->r = r;
 		this->g = g;
 		this->b = b;
 	}
-	RGBRecord(uchar r, uchar g, uchar b, int x, int y, string filename) // all set
+	RGBRecord(unsigned char r, unsigned char g, unsigned char b, int x, int y, string filename) // all set
 	{
 		this->r = r;
 		this->g = g;
@@ -36,14 +34,12 @@ public:
 
 	// interfaces
 	// print a record
-	friend ostream& operator << (ostream &out, RGBRecord &record );
+	friend ostream& operator << (ostream &out,const RGBRecord &record );
 	// write a record to a file
-	friend ofstream& operator << (ofstream &file, RGBRecord &record );
+	friend ofstream& operator << (ofstream &file,const RGBRecord &record );
 
 private:
-	uchar r;
-	uchar g;
-	uchar b;
+	unsigned char r,g,b;
 	int x, y;
 	string filename;
 };
