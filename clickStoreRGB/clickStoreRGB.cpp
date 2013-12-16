@@ -11,6 +11,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <Windows.h>
 
 #include "RGBRecord.h"
 
@@ -26,7 +27,7 @@ vector<RGBRecord> rgbVec;
 
 static void onMouse( int event, int x, int y, int, void* )
 {
-    if( event == CV_EVENT_LBUTTONDOWN )
+	if( event == CV_EVENT_LBUTTONUP )
 	{
 		Mat_<Vec3b> _img = img;
 		RGBRecord record( _img(y,x)[2], _img(y,x)[1], _img(y,x)[0],
@@ -37,7 +38,20 @@ static void onMouse( int event, int x, int y, int, void* )
 		
 		return;
 	}
-
+	else if ( event == CV_EVENT_RBUTTONUP )
+	{
+		if(!rgbVec.empty()) // do nothing if empty
+		{
+			RGBRecord record;
+			record = rgbVec.back();
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY |
+									FOREGROUND_RED);
+			cout << "deleted: "<< record << endl;
+			// reset the font color
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x7);
+			rgbVec.pop_back();
+		}
+	}
 }
 
 void writeVec()
