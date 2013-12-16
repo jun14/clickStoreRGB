@@ -44,12 +44,12 @@ static void onMouse( int event, int x, int y, int, void* )
 		{
 			RGBRecord record;
 			record = rgbVec.back();
+			rgbVec.pop_back();
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY |
 									FOREGROUND_RED);
 			cout << "deleted: "<< record << endl;
 			// reset the font color
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x7);
-			rgbVec.pop_back();
 		}
 	}
 }
