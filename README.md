@@ -1,4 +1,6 @@
-# 鼠标点击显示RGB并存储
+# click store RGB 
+
+鼠标点击显示RGB并存储
 
 ## 功能说明
 
@@ -24,12 +26,13 @@
 7. 按回车前进一帧, 按ESC退出并保存数据  
 8. 按右键回复撤销最后的一条记录
 
-记录文件位置在程序所在位置, 文件名是rgbStat.txt
+说明: 记录文件位置在程序所在位置, 文件名是*rgbStat.txt*
 
-## 版本说明:
+## 版本说明
 
 ### v1.0
 
+2013年12月16日  
 完成功能8
 
 ### v0.3
@@ -52,5 +55,5 @@
 
 ## 许可
 
-Copyright (c) 2013 Zhang Jun. 
+Copyright (c) 2013 Zhang Jun.  
 See the LICENSE file for license rights and limitations (MIT).
