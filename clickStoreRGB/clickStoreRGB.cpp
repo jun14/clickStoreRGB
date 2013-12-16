@@ -18,21 +18,26 @@ using namespace::std;
 using namespace::cv;
 
 Mat img; // 图片
+int frameNum = -1; // 帧数
 string filename; // 当前图片路径
 vector<RGBRecord> rgbVec;
 
 
+
 static void onMouse( int event, int x, int y, int, void* )
 {
-    if( event != CV_EVENT_LBUTTONDOWN )
-        return;
-	
-	Mat_<Vec3b> _img = img;
-	RGBRecord record( _img(y,x)[2], _img(y,x)[1], _img(y,x)[0], y, x, filename); 
-	rgbVec.push_back(record);
-	cout << record << endl;
-	img = _img;
-	
+    if( event == CV_EVENT_LBUTTONDOWN )
+	{
+		Mat_<Vec3b> _img = img;
+		RGBRecord record( _img(y,x)[2], _img(y,x)[1], _img(y,x)[0],
+						  y, x, frameNum, filename); 
+		rgbVec.push_back(record);
+		cout << record << endl;
+		img = _img;
+		
+		return;
+	}
+
 }
 
 void writeVec()
@@ -104,48 +109,95 @@ bool isVideo(string filename)
 	return false;
 }
 
+void dealImage()
+{
+	img = imread(filename);
+	if(! img.data )                              // Check for invalid input
+	{
+		cout <<  "Could not open or no such image file." << std::endl ;
+		return ;
+	}
+	for (;;)
+	{
+		const string WIN_SRC  = "src_pic";
+		namedWindow( WIN_SRC, CV_WINDOW_AUTOSIZE );// Create a window for display.
+		setMouseCallback(WIN_SRC, onMouse);
+		imshow( WIN_SRC, img );                   // Show our image inside it.
+
+		char c = (char)waitKey();
+		if (c==27) // ESC pressed
+		{
+			writeVec();
+			break;
+		}
+	}
+}
+
+void dealVideo()
+{
+	VideoCapture capt = (filename);
+	if(!capt.isOpened())
+	{
+		cout << "Can't open video file : " << filename << endl;
+		return;
+	}
+	for(;;)
+	{
+		capt >> img;
+		++frameNum ;
+		if (img.empty())
+		{
+			cout << "Video is over." << endl;
+		}
+		cout << "frame = " <<  frameNum << endl;
+		const char *WIN_CAP = "src_vid";
+		namedWindow(WIN_CAP);
+		setMouseCallback(WIN_CAP, onMouse);
+		imshow (WIN_CAP, img);
+
+		char c = (char)waitKey();
+		// ignore other input keys
+		while ( (c!=13) && (c != 27) )
+		{
+			c = (char)waitKey();
+		}
+		if (c==13) // ENTER to forward 
+		{
+			continue;
+		}
+		if (c==27) // ESC to EXIT
+		{
+			writeVec();
+			break;
+		}
+	}
+
+}
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 
 	cout << "input an file: " <<ends;
-	cin >> filename;
+	getline(cin, filename);
 	cout << "input accepted : " << filename << endl;
 
-	if(isImage(filename))
+	if(isImage(filename)) // if it's an image
 	{
 		cout << "This is an image." << endl;
+		dealImage();
 	}
 	else if(isVideo(filename))
 	{
-		cout << "This is a vdio." << endl;
+		cout << "This is a video." << endl;
+		dealVideo();
 	}
 	else
 	{
 		cout << "Unknown-type file." << endl;
 	}
 
-	img = imread(filename);
-	if(! img.data )                              // Check for invalid input
-	{
-		cout <<  "Could not open or no such file." << std::endl ;
-		return -1;
-	}
 	
-	for (;;)
-	{
-		const string WIN_SRC  = "src";
-		namedWindow( WIN_SRC, CV_WINDOW_AUTOSIZE );// Create a window for display.
-		setMouseCallback(WIN_SRC, onMouse);
-		imshow( WIN_SRC, img );                   // Show our image inside it.
-
-		char c = (char)waitKey();
-		if (c==27)
-		{
-			writeVec();
-			break;
-		}
-	}
 
 	return 0;
 }
