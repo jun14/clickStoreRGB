@@ -162,6 +162,8 @@ void dealVideo()
 		if (img.empty())
 		{
 			cout << "Video is over." << endl;
+			writeVec();
+			return;
 		}
 		cout << "frame = " <<  frameNum << endl;
 		const char *WIN_CAP = "src_vid";
