@@ -18,9 +18,10 @@
 using namespace::std;
 using namespace::cv;
 
-Mat img; // 图片
-int frameNum = -1; // 帧数
-string filename; // 当前图片路径
+Mat img;		// 图片
+int frameNum = -1;	// 帧数
+string filename;	// 当前图片路径
+char sc[500];		// 当前图片路径转换
 vector<RGBRecord> rgbVec;
 
 
@@ -149,7 +150,7 @@ void dealImage()
 
 void dealVideo()
 {
-	VideoCapture capt = (filename);
+	VideoCapture capt(filename);
 	if(!capt.isOpened())
 	{
 		cout << "Can't open video file : " << filename << endl;
@@ -190,13 +191,45 @@ void dealVideo()
 
 }
 
+string& replace_all_distinct(string& str, const string& old_value, const string& new_value)     
+{     
+    for(string::size_type pos = 0; pos != string::npos; 
+		pos += new_value.length() )
+	{
+		pos=str.find(old_value, pos);
+        if( pos != string::npos )     
+		{
+			str.replace(pos, old_value.length(), new_value);
+		}
+        else
+		{
+			break;
+		}
+	}     
+	return str;     
+} 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	while (filename.empty())
+	{
+		if ( argc == 2 ) // drag file input
+		{
+			wcout << "drag file: " << argv[1] << endl;
+			// Converts Unicode string to ANSI
+			sprintf(sc,"%S", argv[1]);
+			filename = string(sc);
+		}
+		else // enter the filepath
+		{
+			cout << "input an file: " <<ends;
+			getline(cin, filename);
+		}
+	} // end while
 
-	cout << "input an file: " <<ends;
-	getline(cin, filename);
-	cout << "input accepted : " << filename << endl;
+
+	replace_all_distinct(filename, string("\\"), string("\\\\") );
+	cout << "file accepted: " << filename << endl;
 
 	if(isImage(filename)) // if it's an image
 	{
@@ -213,7 +246,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout << "Unknown-type file." << endl;
 	}
 
-	
+	// show the results
+	getchar();
 
 	return 0;
 }
