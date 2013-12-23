@@ -16,7 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
-    <None Include="C:\Users\Jun\Desktop\favicon.ico">
+    <None Include="rgb.ico">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
