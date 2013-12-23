@@ -114,7 +114,7 @@ bool isImage(string filename)
 bool isVideo(string filename)
 {
 	string strExt = ext(filename);
-	if( strExt == "avi" || strExt == "3gp" || strExt == "rmvb" || 
+	if( strExt == "avi" || strExt == "3gp" || strExt == "rmvb" || strExt == "flv" || 
 		strExt == "mp4" || strExt == "wmv" || strExt == "mkv" )
 	{
 		cout << "ext is: " << strExt << endl;
