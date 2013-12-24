@@ -244,10 +244,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	else
 	{
 		cout << "Unknown-type file." << endl;
+		// show the results
+		getchar();
 	}
-
-	// show the results
-	getchar();
 
 	return 0;
 }
