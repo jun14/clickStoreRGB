@@ -1,4 +1,3 @@
-
 # click store RGB 分支文档
 
 鼠标点击显示RGB并存储
