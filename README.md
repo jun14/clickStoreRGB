@@ -1,4 +1,4 @@
-# click store RGB 
+# click store RGB 稳定版本文档
 
 鼠标点击显示RGB并存储
 
